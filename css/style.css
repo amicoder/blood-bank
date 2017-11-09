@@ -1,0 +1,121 @@
+html , body {
+	height: 100%;
+	overflow-x: hidden;
+}
+.form-group{
+	margin-bottom: 0px;
+}
+.fullscreen{
+	height: 100%;
+
+}
+.donarImage{
+    align-self: flex-start;
+    margin: 5px;
+}
+.donarTitle{
+  
+    display: flex;
+ 
+    background-color: red;
+    box-shadow: 0px 2px 5px #bdbdbd;
+}
+.tableContainer{
+    padding: 10px;
+}
+.infoPanel{
+    background-color: #fff;
+}
+.profileContainer{
+    background-color: #fff;
+    padding: 0px;
+    flex-direction: column;
+    display: flex
+    
+}
+.donarProfile{
+    display: flex;
+    flex-grow: 2;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+.posterParent{
+	background-color: red;
+}
+.poster{
+	height: 100%;
+    padding: 10%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+
+    color: blanchedalmond;
+    font-family: fantasy;
+}
+.center{
+	text-align: center;
+}
+.bloodDonated{
+    
+    height: 200px;
+    width: 200px;
+    background-color: red;
+    background-size: cover;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.dsu_formcontainer{
+	height: 100%;
+    padding: 10%;
+}
+
+.custom-form-control{
+	border-radius: 0px;
+	padding-left: 12px;
+	border: 0px solid #f1f1f1;
+    box-shadow: 0px 0px 0px;
+    height: 40px;
+    border-bottom: 2px solid #f1f1f1;
+    background-color: rgba(255, 255, 255, 0);
+    transition: border-bottom ease-in-out .3s;
+}
+
+.custom-form-control:focus{
+	outline: none;
+	border: 0px solid #f1f1f1;
+	border-bottom: 2px solid red;
+	box-shadow: 0px 0px 0px;
+
+}
+.donarName{
+    margin-left: 20px;
+    color: white;
+    font-size: 25px;
+    align-self: center;
+
+}
+.bloodPintsContainer{
+
+}
+.totalPoints{
+    
+    font-size: 400%;
+    color: white;
+    font-weight: 900;
+}
+label{
+	height: 13px;
+    display: block;
+    position: relative;
+    font: 15.3333px Arial;
+    z-index: -1;
+    font-size: 13px;
+    padding-left: 12px;
+    color: grey;
+    transform: translateY(29px);
+    opacity: 1;
+    transition: all ease-in-out .2s;
+}
