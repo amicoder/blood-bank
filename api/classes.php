@@ -48,12 +48,24 @@ class AuthObject {
 
 	}
 
+	public function createBankSession($did){
+
+		if (session_status() == PHP_SESSION_NONE) {
+		    session_start();
+		}
+
+		$_SESSION['bid'] = $did;
+		
+
+
+	}
 	public function checkCurrentSession(){
 
 		session_start();
 
 		if(isset($_SESSION['id']) && $_SESSION['id'] != null){
 			$currentLoggedDonarId = $_SESSION['id'];
+			return $_SESSION['id'];
 			//session does not 
 		}
 	}
@@ -133,6 +145,31 @@ class AuthObject {
 
 	}
 
+	public function authBank($uname,$pword){
+
+
+				
+
+				//$sql = "SELECT * from donarprofile WHERE uname = '".$uname."' AND pword = '".$pword."'";
+
+				//$result = $conn->query($sql);
+				if($uname === "admin" && $pword === "admin"){
+
+					
+
+					$this->createBankSession($uname);
+
+					
+					return true;
+				}
+				else {
+					
+					return false;
+				}
+
+	
+
+	}
 
 
 	//function to creat hospital
@@ -201,6 +238,49 @@ class CustomHandleHttpRequest{
 
 	}
 
+	public function bankLogin(){
+
+		$uname = $pword = "";
+
+		if($_SERVER["REQUEST_METHOD"] == "POST"){
+
+			
+			$uname = $this->test_input($_POST["uname"]);
+			$pword = $this->test_input($_POST["pword"]);
+		
+
+
+			$ao = new AuthObject();
+			if($ao->authBank($uname,$pword) === true) return 2;
+			else return 1;
+
+			//$ao->createDonar('Arya','21','Koramangla Sony','A+','75','arya12345','pass12345','male');
+
+		}
+		else{
+			return 0;
+		}
+
+	}
+	public function collectBlood(){
+
+		$did = $quantity = $bloodGroup = "";
+		if($_SERVER["REQUEST_METHOD"] == "POST"){
+
+			
+			$did = $this->test_input($_POST["did"]);
+			$quantity = $this->test_input($_POST["quantity"]);
+			$bloodGroup = $this->test_input($_POST["bloodGroup"]);
+
+
+
+			
+
+			//$ao->createDonar('Arya','21','Koramangla Sony','A+','75','arya12345','pass12345','male');
+
+		}
+
+	}
 	function test_input($data) {
 	  $data = trim($data);
 	  $data = stripslashes($data);
@@ -277,7 +357,7 @@ class Donar {
 
 				
 
-				$sql = "SELECT * from donation WHERE did = '".$did."'";
+				$sql = "SELECT * from modifieddonation WHERE did = '".$did."'";
 
 				$result = $conn->query($sql);
 
@@ -287,7 +367,7 @@ class Donar {
 					while($row = $result->fetch_assoc()){
 						//echo "Location :".$row['locationid']." Quantity :".$row['quantity'];
 
-						$data = $data."{\"location\":\"".$row['locationid']."\",\"quantity\":\"".$row['quantity']."\",\"date\":\"".$row['rdate']."\"},";
+						$data = $data."{\"location\":\"".$row['venue']."\",\"quantity\":\"".$row['quantity']."\",\"date\":\"".$row['rdate']."\"},";
 					}
 
 
@@ -295,8 +375,44 @@ class Donar {
 					echo $data;
 				}
 				else{
-					$data = "{\"status\":\"true\",\"data\":[]}";
+					$data = "{\"status\":\"false\",\"data\":[]}";
 					echo $data;
+				}
+				
+				
+
+			}else{
+				echo "Some Error ".$sqlObj->conn->error;
+			}
+			
+		}
+		else{
+
+			echo "cannot create connection";
+		}
+	}
+
+	public function submitDonation($did,$quantity,$bloodGroup,$eid){
+		$sqlObj = new SQLConnection();
+		
+
+		if($sqlObj->createConnection()){
+
+			if($sqlObj->conn != null){
+
+
+				$conn = $sqlObj->conn;
+				
+
+				$currentDate = date("Y-m-d");				
+				$sql = "INSERT into donation(did,quantity,rdate,blood_group,eid) values('".$did."','".$quantity."','".$currentDate."','".$bloodGroup."','".$eid."')";
+
+				
+				if($conn->query($sql) === true){
+					echo "{\"status\":\"true\"}";
+				}
+				else{
+					echo "{\"status\":\"".$conn->error."\"}";
 				}
 				
 				
@@ -316,5 +432,287 @@ class Donar {
 
 }
 
+
+class Events {
+	
+	public function getLocation(){
+		$sqlObj = new SQLConnection();
+		
+
+		if($sqlObj->createConnection()){
+
+			if($sqlObj->conn != null){
+
+
+				$conn = $sqlObj->conn;
+				
+
+				$currentDate = date("Y-m-d");				
+				
+				$sql = "SELECT lname,locationid  from locations ";
+				//echo $sql;
+				
+				$result = $conn->query($sql);
+				if($result->num_rows >0){
+					$data = "";
+					while($row = $result->fetch_assoc()){
+						//echo "Location :".$row['locationid']." Quantity :".$row['quantity'];
+
+						$data = '<option value="'.$row['locationid'].'">'.$row['lname'].'</option>';
+					}
+
+
+					
+					echo $data;
+				}
+				else{
+					$data = '<option value="null">Error</option>';
+					echo $data;
+				}
+					
+			}else{
+				$data = "{\"status\":\"error\",\"data\":[]}";
+				echo $data;
+
+			}
+				
+			
+		}
+		else{
+
+			echo "cannot create connection";
+		}
+	}
+
+	public function deleteEvent($eid){
+
+		$sqlObj = new SQLConnection();
+		
+
+		if($sqlObj->createConnection()){
+
+			if($sqlObj->conn != null){
+
+
+				$conn = $sqlObj->conn;
+				
+
+				//$currentDate = date("Y-m-d");				
+				
+				$sql = "DELETE from donationevent where eid=".eid;
+				//echo $sql;
+				
+				if($conn->query($sql)){
+					echo '{"status:":"true"}';
+				}else{
+					echo '{"status:":"'.$conn->error.'"}';
+				}
+				
+					
+			}else{
+				
+				echo '{"status:":"false"}';
+
+			}
+				
+			
+		}
+		else{
+
+			echo "cannot create connection";
+		}
+	}
+
+	public function createEvents($ename,$locationid,$shortdesc,$src,$date){
+		
+
+		$sqlObj = new SQLConnection();
+		
+
+		if($sqlObj->createConnection()){
+
+			if($sqlObj->conn != null){
+
+
+				$conn = $sqlObj->conn;
+				
+
+				//$currentDate = date("Y-m-d");				
+				
+				$sql = "INSERT INTO donationevent(ename,locationid,shortdesc,imgsrc,edate) VALUES('".$ename."','".$locationid."','".$shortdesc."','".$src."','".$date."')";
+				//echo $sql;
+				
+				if($conn->query($sql)){
+					echo "DONE";
+				}else{
+					echo "error :".$conn->error;
+				}
+				
+					
+			}else{
+				$data = "{\"status\":\"error\",\"data\":[]}";
+				echo $data;
+
+			}
+				
+			
+		}
+		else{
+
+			echo "cannot create connection";
+		}
+		
+	}
+
+	public function getUpcomingEvents(){
+		$sqlObj = new SQLConnection();
+		
+
+		if($sqlObj->createConnection()){
+
+			if($sqlObj->conn != null){
+
+
+				$conn = $sqlObj->conn;
+				
+
+				$currentDate = date("Y-m-d");				
+				
+				$sql = "SELECT E.eid,E.ename,E.shortdesc,E.edate,E.imgsrc as src,L.lname as venue from donationevent E, locations L where E.locationid = L.locationid and E.edate >=".$currentDate." order by E.edate";
+				//echo $sql;
+				
+				$result = $conn->query($sql);
+				if($result->num_rows >0){
+					$data = "{\"status\":\"true\",\"data\":[";
+					while($row = $result->fetch_assoc()){
+						//echo "Location :".$row['locationid']." Quantity :".$row['quantity'];
+
+						$data = $data."{\"eid\":\"".$row['eid']."\",\"ename\":\"".$row['ename']."\",\"edate\":\"".$row['edate']."\",\"src\":\"".$row['src']."\",\"venue\":\"".$row['venue']."\",\"shortdesc\":\"".$row['shortdesc']."\",\"canstart\":\"".($row['edate']==$currentDate? 'true':'false')."\"},";
+					}
+
+
+					$data = substr($data, 0, -1)."]}";
+					echo $data;
+				}
+				else{
+					$data = "{\"status\":\"false\",\"data\":[]}";
+					echo $data;
+				}
+					
+			}else{
+				$data = "{\"status\":\"error\",\"data\":[]}";
+				echo $data;
+
+			}
+				
+			
+		}
+		else{
+
+			echo "cannot create connection";
+		}
+	}
+
+	public function getAllEvents(){
+		$sqlObj = new SQLConnection();
+		
+
+		if($sqlObj->createConnection()){
+
+			if($sqlObj->conn != null){
+
+
+				$conn = $sqlObj->conn;
+				
+
+				$currentDate = date("Y-m-d");				
+				
+				$sql = "SELECT E.eid,E.ename,E.shortdesc,E.edate,E.imgsrc as src,L.lname as venue from donationevent E, locations L where E.locationid = L.locationid and E.edate >=".$currentDate." order by E.edate";
+				//echo $sql;
+				
+				$result = $conn->query($sql);
+				if($result->num_rows >0){
+					$data = "{\"status\":\"true\",\"data\":[";
+					while($row = $result->fetch_assoc()){
+						//echo "Location :".$row['locationid']." Quantity :".$row['quantity'];
+
+						$data = $data."{\"eid\":\"".$row['eid']."\",\"ename\":\"".$row['ename']."\",\"edate\":\"".$row['edate']."\",\"src\":\"".$row['src']."\",\"venue\":\"".$row['venue']."\",\"shortdesc\":\"".$row['shortdesc']."\",\"canstart\":\"".($row['edate']==$currentDate? 'true':'false')."\"},";
+					}
+
+
+					$data = substr($data, 0, -1)."]}";
+					echo $data;
+				}
+				else{
+					$data = "{\"status\":\"false\",\"data\":[]}";
+					echo $data;
+				}
+					
+			}else{
+				$data = "{\"status\":\"error\",\"data\":[]}";
+				echo $data;
+
+			}
+				
+			
+		}
+		else{
+
+			echo "cannot create connection";
+		}
+	}
+}
+
+class Bank{
+
+	public function getProducts(){
+
+		$sqlObj = new SQLConnection();
+
+		if($sqlObj->createConnection()){
+
+			if($sqlObj->conn != null){
+
+
+				$conn = $sqlObj->conn;
+				
+
+				$currentDate = date("Y-m-d");				
+				
+				$sql = "SELECT * from product where product";
+				//echo $sql;
+				
+				$result = $conn->query($sql);
+				if($result->num_rows >0){
+					$data = "{\"status\":\"true\",\"data\":[";
+					while($row = $result->fetch_assoc()){
+						//echo "Location :".$row['locationid']." Quantity :".$row['quantity'];
+
+						$data = $data."{\"pid\":\"".$row['pid']."\",\"pname\":\"".$row['pname']."\",\"ptype\":\"".$row['ptype']."\",\"bloodGroup\":\"".$row['blood_group']."\",\"quantity\":\"".$row['aquantity']."\"},";
+					}
+
+
+					$data = substr($data, 0, -1)."]}";
+					echo $data;
+				}
+				else{
+					$data = "{\"status\":\"false\",\"data\":[]}";
+					echo $data;
+				}
+					
+			}else{
+				$data = "{\"status\":\"error\",\"data\":[]}";
+				echo $data;
+
+			}
+				
+			
+		}
+		else{
+
+		
+		}
+	}
+}
 ?>
 

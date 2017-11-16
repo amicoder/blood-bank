@@ -21,7 +21,7 @@
 
 			var label = $("[data='"+$(this).attr("target-label")+"']");
 			$(this).attr('value','');
-			label.css({"z-index":"1","opacity": "1", "transform": "translateY(10px)","font-size":"11px","color":"red"});
+			label.css({"z-index":"8","opacity": "1", "transform": "translateY(10px)","font-size":"11px","color":"red"});
 			//alert("Clicked :"+label.attr("for"));
 			
 
@@ -31,7 +31,7 @@
 
 			var label = $("[data='"+$(this).attr("target-label")+"']");
 			$(this).attr('placeholder','');
-			label.css({"z-index":"1","opacity": "1", "transform": "translateY(10px)","font-size":"11px","color":"red"});
+			label.css({"z-index":"8","opacity": "1", "transform": "translateY(10px)","font-size":"11px","color":"red"});
 			
 			
 			
@@ -46,7 +46,7 @@
 
 				var label = $("[data='"+$(this).attr("target-label")+"']");
 				
-				label.css({"z-index":"-1","opacity": "1", "transform": "translateY(29px)","font-size":"13px","color":"grey"});
+				label.css({"z-index":"5","opacity": "1", "transform": "translateY(29px)","font-size":"13px","color":"grey"});
 			}
 			else{
 
@@ -60,40 +60,57 @@
 	});
 
 	</script>
+	<style>
+		body{
+			background-color: red;
+		}
+
+		label{
+	
+    	z-index: 5;
+    
+		}
+
+		.custom-form-control{
+
+			z-index: 6;
+			position: relative;
+		}
+
+	</style>
 
 </head>
 
 <body>
-	<div class="fluid-container fullscreen">
-		<div class="row fullscreen">
-			<div class="col-sm-3 fullscreen posterParent">
+	<div class="fluid-container ">
+		<div class="row ">
+			<div class="col-sm-3 ">
 				<div class="poster">
 					
 				</div> 
 			</div>
-			<div class="col-sm-6 fullscreen">
+			<div class="col-sm-6 ">
 
 				<div class="dsu_formcontainer">
-					<form name="donarLogin" action="donar/login.php" method="post">
+					<form name="donarLogin" action="processlogin.php" method="post">
 						 
 						   <div>Login</div>
 						    <div class="form-group">
 								<label data="uname">Username</label>
 								<input target-label="uname" type="text" name="uname" class="form-control custom-form-control" id="uname" autocomplete="off">								    
 						    </div>					  	
-						  		<div class="form-group">
-								    <label data="pword">Password</label>
-								    <input target-label="pword" type="password" name="pword" class="form-control custom-form-control" id="pword">
-								    
-								</div>
+					  		<div class="form-group">
+							    <label data="pword">Password</label>
+							    <input target-label="pword" type="password" name="pword" class="form-control custom-form-control" id="pword">
+							    
+							</div>
 
-						  <input type="submit" style="outline:none;border-radius: 200px; margin-top: 10px; width:100px;background-color: red" class="btn btn-danger" value="login"/>
-						   
-						   
+						  <input type="submit" style="outline:none;border-radius: 200px; margin-top: 10px; width:100px;background-color: red" class="btn btn-danger" value="login">					   
 					</form>
+					<a class="btn" href="./donarSignUp.php">Signin</a>
 				</div> 
 			</div>
-			<div class="col-sm-3 fullscreen posterParent">
+			<div class="col-sm-3 ">
 				<div class="poster">
 					
 				</div> 

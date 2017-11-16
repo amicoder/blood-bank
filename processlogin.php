@@ -1,13 +1,13 @@
 <?php
 
-		include "../api/classes.php";
+		include "./api/classes.php";
 
 		
 		$request = new CustomHandleHttpRequest();
 		
 
 		if($request->donarLogin()){
-			header("Location: ../profile.php");
+			header("Location: ./profile.php");
 		}
 		else{
 

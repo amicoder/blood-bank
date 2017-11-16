@@ -21,7 +21,7 @@
 
 			var label = $("[data='"+$(this).attr("target-label")+"']");
 			$(this).attr('value','');
-			label.css({"z-index":"1","opacity": "1", "transform": "translateY(10px)","font-size":"11px","color":"red"});
+			label.css({"z-index":"8","opacity": "1", "transform": "translateY(10px)","font-size":"11px","color":"red"});
 			//alert("Clicked :"+label.attr("for"));
 			
 
@@ -31,7 +31,7 @@
 
 			var label = $("[data='"+$(this).attr("target-label")+"']");
 			$(this).attr('placeholder','');
-			label.css({"z-index":"1","opacity": "1", "transform": "translateY(10px)","font-size":"11px","color":"red"});
+			label.css({"z-index":"8","opacity": "1", "transform": "translateY(10px)","font-size":"11px","color":"red"});
 			
 			
 			
@@ -46,7 +46,7 @@
 
 				var label = $("[data='"+$(this).attr("target-label")+"']");
 				
-				label.css({"z-index":"-1","opacity": "1", "transform": "translateY(29px)","font-size":"13px","color":"grey"});
+				label.css({"z-index":"5","opacity": "1", "transform": "translateY(29px)","font-size":"13px","color":"grey"});
 			}
 			else{
 
@@ -59,8 +59,20 @@
 
 	});
 
-	</script>
+		</script>
+	<style>
+		label{
+	
+    	z-index: 5;
+    
+		}
 
+		.custom-form-control{
+
+			z-index: 6;
+			position: relative;
+		}
+	</style>
 </head>
 
 <body>
@@ -76,7 +88,7 @@
 			</div>
 			<div class="col-sm-6 fullscreen">
 				<div class="dsu_formcontainer">
-					<form name="donarSignUp" action="donar/add.php" method="post">
+					<form name="donarSignUp" action="./donar/add.php" method="post">
 						 
 						   <div class="form-group">
 								    <label data="name">Name</label>

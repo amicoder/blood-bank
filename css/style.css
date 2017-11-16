@@ -9,6 +9,28 @@ html , body {
 	height: 100%;
 
 }
+
+.edateStamp{
+    position: absolute;
+    background-color: #fff686;
+    width: 40px;
+    height: 40px;
+    z-index: 10;
+    border-radius: 50%;
+    margin: 10px;
+    text-align: center;
+}
+
+.fedateStamp{
+    position: relative;
+    background-color: #fff686;
+    width: 40px;
+    height: 40px;
+    z-index: 10;
+    border-radius: 50%;
+    margin: 10px;
+    text-align: center;
+}
 .donarImage{
     align-self: flex-start;
     margin: 5px;
@@ -69,7 +91,11 @@ html , body {
 }
 .dsu_formcontainer{
 	height: 100%;
+    background-color: white;
     padding: 10%;
+    border-radius: 2px;
+    margin: 10px;
+
 }
 
 .custom-form-control{
@@ -118,4 +144,211 @@ label{
     transform: translateY(29px);
     opacity: 1;
     transition: all ease-in-out .2s;
+}
+
+.custom_card{
+    position: relative;
+    width: 24rem;
+    /* height: 10%; */
+    float: left;
+    margin: 5px;
+    height: 280px;
+    transition: box-shadow ease-in-out .3s;
+    box-shadow: 0 2px 2px 0 rgba(159,167,194,0.6);
+    border-radius: 2px;
+    animation: sidein 0.5s ease-in-out;
+    background-color: whitesmoke;
+
+}
+.custom_card .custom_card_content{
+    position: absolute;
+    bottom: 0;
+    padding: 15px;
+    width: 100%;
+    background-color: white;
+}
+.custom_card_img{
+    width: 100%;
+    border-radius: 2px;
+}
+
+.custom_card_title{
+    background-color: white;
+}
+.custom_card_description{
+   
+    display: block;
+    overflow: hidden;
+    height: 0;
+    opacity: 0;
+    transition: all ease-in-out .3s;
+}
+.custom_card:hover{
+    box-shadow: 0 4px 30px #a2a2a2;
+}
+.custom_card:hover .custom_card_content .custom_card_description {
+    height: 80px;
+    opacity: 1;
+    
+}
+.card_start{
+    display: flex;
+    justify-content: center;
+    padding-top: 10px;
+}
+
+.edate{
+    position: relative;
+    top: 5px;
+}
+
+.emonth{
+    font-size: xx-small;
+}
+
+.custom_like_button{
+    outline: none;
+    border:0;
+    background-color: transparent;
+     transition: all ease-in-out .2s;
+}
+
+.custom_line_button:focus{
+    transform: scale(1.2);
+    
+}
+.custom_line_button:active{
+ 
+  
+
+}
+.custom_like_button:hover{
+    transform: scale(1.2);
+    color: #265dac !important;
+}
+
+
+.custom_like{
+    font-size: 15px !important;
+}
+
+.event_cards{
+   
+
+}
+    
+
+.navigations{
+    background-color: white;
+    padding: 0px;
+}
+.nav_btn{
+    margin-top:0px !important;
+    outline: none;
+    border-radius: 0px;
+    background-color: white;
+    border-bottom: 1px solid #e1e1e1;
+    height: 54px;
+    color: #9b9a9a;
+    font-weight: bold;
+    transition: all ease-in-out .2s;
+    display: flex;
+    align-items: center;
+   
+}
+
+.nav_btn:focus{
+    outline: none;
+}
+.nav_btn:hover{
+    outline: none;
+    color: white;
+    background-color: red;
+}
+.nav_btn:active{
+    outline: none !important;
+    transform: scale(1.05);
+    box-shadow: 0 0px 10px grey;
+}
+
+.nav_title{
+    padding-left: 20px;
+}
+
+.card_location{
+    display: flex;
+    align-items: center;
+    padding-top: 4px;
+}
+
+.location_namr{
+    color: #8a8a8a;
+    padding-left: 5px;
+}
+
+.hide{
+    display: none;
+}
+
+.show{
+    display: inherit;
+}
+
+.custom-nav-bar{
+    margin-top: 10px;
+    margin-bottom: 5px;
+    background-color: transparent; 
+   border-color: transparent;
+}
+.comingsoon{
+    margin-top: 5px;
+    text-align: center;
+}
+
+.circle{
+    float: left;
+    margin: 20px;
+    position: relative;
+    width: 15em;
+    height: 15em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: grow 2s ease-in-out;
+}
+
+.circle_item {
+    position: absolute;
+    top: 108px;
+    font-size: 32px;
+    color: #585858;
+}
+
+@keyframes sidein{
+    0% {opacity: 0; transform:translateY(10px);}
+    
+    100% {opacity: 1; transform:translateY(0px);}
+}
+@keyframes grow {
+    0% {transform: scale(0);}
+    25% {transform: scale(1.1);}
+    40% {transform: scale(1);}
+    100% {transform: scale(1);}
+}
+.group{
+    position: absolute;
+    top: 44px;
+    left: 66px;
+    height: 80px;
+    font-size: 37px;
+    width: 80px;
+    color: #959595;
+    text-align: center;
+    padding: 14px;
+    border-radius: 50%;
+}
+
+.circle_img{
+    height: 18em;
+    width: 12em;
 }
