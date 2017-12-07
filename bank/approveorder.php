@@ -3,12 +3,14 @@
 	require_once "../api/classes.php";
 
 	if($_SERVER['REQUEST_METHOD'] === "POST"){
-		$eid = $_POST['eid'];
+		$oid = $_POST['oid'];
 
 
-		$event = new Events();
+		$hos = new Hospital();
 
-		$event->deleteEvent($eid);
+		$hos->approveOrder($oid);
 	}
+
+
 
 ?>

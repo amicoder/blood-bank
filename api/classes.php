@@ -33,6 +33,7 @@ class AuthObject {
 
 
 	public $currentLoggedDonarId = null;
+	public $currentLoggedHospitalId = null;
 
 	//function To create session for donar
 
@@ -48,6 +49,56 @@ class AuthObject {
 
 	}
 
+		public function createHospitalSession($hid,$hname){
+
+		if (session_status() == PHP_SESSION_NONE) {
+		    session_start();
+		}
+
+		$_SESSION['hid'] = $hid;
+		$_SESSION['hname'] = $hname;
+		$currentLoggedHospitalId = $_SESSION['hid'];
+
+
+	}
+
+	public function authAdmin($uname,$pword){
+
+		$sqlObj = new SQLConnection();
+
+		if($sqlObj->createConnection()){
+
+			if($sqlObj->conn != null){
+
+
+				$conn = $sqlObj->conn;
+				
+				//$pword = sha1($pword);
+
+				$sql = "SELECT * from admin WHERE uname = '".$uname."' AND pword = '".$pword."'";
+
+				$result = $conn->query($sql);
+				if($result->num_rows == 1){
+
+					$row = $result->fetch_assoc();
+					
+					return true;
+				}
+				else {
+					
+					return false;
+				}
+
+			}
+			
+		}
+		else{
+
+			echo "cannot create connection";
+		}
+
+		return false;
+	}
 	public function createBankSession($did){
 
 		if (session_status() == PHP_SESSION_NONE) {
@@ -88,6 +139,8 @@ class AuthObject {
 				
 				if($conn->query($sql) === true){
 					echo "User Successfully added";
+					header("Location: ../Login.php");
+
 				}
 				else{
 					echo $conn->error;
@@ -145,19 +198,64 @@ class AuthObject {
 
 	}
 
-	public function authBank($uname,$pword){
 
 
+
+	//function to creat hospital
+	public function createHospital($hname,$uname,$pword){
+
+		$sqlObj = new SQLConnection();
+
+		if($sqlObj->createConnection()){
+
+			if($sqlObj->conn != null){
+
+
+				$conn = $sqlObj->conn;
 				
+				$pword = sha1($pword);
 
-				//$sql = "SELECT * from donarprofile WHERE uname = '".$uname."' AND pword = '".$pword."'";
+				$sql = "INSERT into hospitals(hname,uname,pword) values('".$hname."','".$uname."','".$pword."')";
+				//echo $sql;
+				
+				if($conn->query($sql) === true){
+					echo "Hospital Successfully added";
+					header('Location: ../');
+					die();
+				}
+				else{
+					echo $conn->error;
+				}
+			}
+			
+		}
+		else{
 
-				//$result = $conn->query($sql);
-				if($uname === "admin" && $pword === "admin"){
+			echo "cannot create connection";
+		}
+	}
 
-					
+	//function to auth hospital
+	public function authHospital($uname,$pword){
+		$sqlObj = new SQLConnection();
 
-					$this->createBankSession($uname);
+		if($sqlObj->createConnection()){
+
+			if($sqlObj->conn != null){
+
+
+				$conn = $sqlObj->conn;
+				
+				$pword = sha1($pword);
+
+				$sql = "SELECT * from hospitals WHERE uname = '".$uname."' AND pword = '".$pword."'";
+				echo $sql."<br>";
+				$result = $conn->query($sql);
+				if($result->num_rows == 1){
+
+					$row = $result->fetch_assoc();
+
+					$this->createHospitalSession($row['hid'],$row['hname']);
 
 					
 					return true;
@@ -167,22 +265,19 @@ class AuthObject {
 					return false;
 				}
 
-	
+			}
+			
+		}
+		else{
 
-	}
+			echo "cannot create connection";
+		}
 
-
-	//function to creat hospital
-	public function createHospital(){
-
-	}
-
-	//function to auth hospital
-	public function authHospital(){
-
+		return false;
 	}
 
 	public function logout(){
+		session_start();
 		session_destroy();
 	}
 }
@@ -216,6 +311,47 @@ class CustomHandleHttpRequest{
 
 	}
 
+	public function hospitalSignup(){
+
+		$hname = $uname = $pword = "";
+
+		if($_SERVER["REQUEST_METHOD"] == "POST"){
+
+			$hname = $this->test_input($_POST["hname"]);
+			$uname = $this->test_input($_POST["uname"]);
+			$pword = $this->test_input($_POST["pword"]);
+			
+
+			$ao = new AuthObject();
+			$ao->createHospital($hname,$uname,$pword);
+
+			//$ao->createDonar('Arya','21','Koramangla Sony','A+','75','arya12345','pass12345','male');
+
+		}
+
+	}
+
+	public function adminLogin(){
+
+		$uname = $pword = "";
+
+		if($_SERVER["REQUEST_METHOD"] == "POST"){
+
+			
+			$uname = $this->test_input($_POST["uname"]);
+			$pword = $this->test_input($_POST["pword"]);
+		
+
+
+			$ao = new AuthObject();
+			if($ao->authAdmin($uname,$pword) === true) return true;
+			else return false;
+
+			//$ao->createDonar('Arya','21','Koramangla Sony','A+','75','arya12345','pass12345','male');
+
+		}
+	}
+
 	public function donarLogin(){
 
 		$uname = $pword = "";
@@ -238,6 +374,29 @@ class CustomHandleHttpRequest{
 
 	}
 
+	public function hospitalLogin(){
+
+		$uname = $pword = "";
+
+		if($_SERVER["REQUEST_METHOD"] == "POST"){
+
+			
+			$uname = $this->test_input($_POST["uname"]);
+			$pword = $this->test_input($_POST["pword"]);
+		
+
+
+			$ao = new AuthObject();
+			if($ao->authHospital($uname,$pword) === true) return true;
+			else return false;
+
+			//$ao->createDonar('Arya','21','Koramangla Sony','A+','75','arya12345','pass12345','male');
+
+		}
+
+	}
+
+
 	public function bankLogin(){
 
 		$uname = $pword = "";
@@ -251,7 +410,7 @@ class CustomHandleHttpRequest{
 
 
 			$ao = new AuthObject();
-			if($ao->authBank($uname,$pword) === true) return 2;
+			if($ao->authAdmin($uname,$pword) === true) return 2;
 			else return 1;
 
 			//$ao->createDonar('Arya','21','Koramangla Sony','A+','75','arya12345','pass12345','male');
@@ -271,10 +430,6 @@ class CustomHandleHttpRequest{
 			$did = $this->test_input($_POST["did"]);
 			$quantity = $this->test_input($_POST["quantity"]);
 			$bloodGroup = $this->test_input($_POST["bloodGroup"]);
-
-
-
-			
 
 			//$ao->createDonar('Arya','21','Koramangla Sony','A+','75','arya12345','pass12345','male');
 
@@ -343,6 +498,53 @@ class Donar {
 		}
 
 	}
+
+	public function getAllDonations(){
+		$sqlObj = new SQLConnection();
+		
+
+		if($sqlObj->createConnection()){
+
+			if($sqlObj->conn != null){
+
+
+				$conn = $sqlObj->conn;
+				
+				$sql = "SELECT donation.did,donation.quantity,donation.rdate,donation.blood_group,donationevent.ename,donarprofile.dname from donation,donationevent,donarprofile where donarprofile.did = donation.did order by donation.rdate";
+
+				$result = $conn->query($sql);
+
+				if($result->num_rows > 0){
+
+					$data = "{\"status\":\"true\",\"data\":[";
+					while($row = $result->fetch_assoc()){
+						//echo "Location :".$row['locationid']." Quantity :".$row['quantity'];
+
+						$data = $data."{\"did\":\"".$row['did']."\",\"quantity\":\"".$row['quantity']."\",\"dname\":\"".$row['dname']."\",\"blood_group\":\"".$row['blood_group']."\",\"ename\":\"".$row['ename']."\",\"date\":\"".$row['rdate']."\"},";
+					}
+
+
+					$data = substr($data, 0, -1)."]}";
+					echo $data;
+				}
+				else{
+					$data = "{\"status\":\"false\",\"data\":[]}";
+					echo $data;
+				}
+				
+				
+
+			}else{
+				echo "Some Error ".$sqlObj->conn->error;
+			}
+			
+		}
+		else{
+
+			echo "cannot create connection";
+		}
+	}
+
 	public function getDonations($did){
 		$sqlObj = new SQLConnection();
 		
@@ -499,7 +701,7 @@ class Events {
 
 				//$currentDate = date("Y-m-d");				
 				
-				$sql = "DELETE from donationevent where eid=".eid;
+				$sql = "DELETE from donationevent where eid=".$eid;
 				//echo $sql;
 				
 				if($conn->query($sql)){
@@ -662,7 +864,195 @@ class Events {
 		}
 	}
 }
+class Hospital {
 
+	public function getOrders($hid){
+
+		$sqlObj = new SQLConnection();
+
+		if($sqlObj->createConnection()){
+
+			if($sqlObj->conn != null){
+
+
+				$conn = $sqlObj->conn;
+				
+
+				$currentDate = date("Y-m-d");				
+				
+				$sql = "SELECT orders.quantity,orders.odate,orders.status,product.pname,product.blood_group from product,orders where orders.pid = product.pid AND orders.hid=".$hid;
+				//echo $sql;
+				
+				$result = $conn->query($sql);
+				if($result->num_rows >0){
+					$data = "{\"status\":\"true\",\"data\":[";
+					while($row = $result->fetch_assoc()){
+						//echo "Location :".$row['locationid']." Quantity :".$row['quantity'];
+
+						$data = $data."{\"odate\":\"".$row['odate']."\",\"pname\":\"".$row['pname']."\",\"status\":\"".$row['status']."\",\"bloodGroup\":\"".$row['blood_group']."\",\"quantity\":\"".$row['quantity']."\"},";
+					}
+
+
+					$data = substr($data, 0, -1)."]}";
+					echo $data;
+				}
+				else{
+					$data = "{\"status\":\"false\",\"data\":[]}";
+					echo $data;
+				}
+					
+			}else{
+				$data = "{\"status\":\"error\",\"data\":[]}";
+				echo $data;
+
+			}
+				
+			
+		}
+		else{
+
+		
+		}
+	}
+	public function approveOrder($oid){
+		$sqlObj = new SQLConnection();
+
+		if($sqlObj->createConnection()){
+
+			if($sqlObj->conn != null){
+
+
+				$conn = $sqlObj->conn;
+				
+			
+				
+				$sql = "UPDATE orders set status = 1 where oid=".$oid;				//echo $sql;
+				
+				
+				if($conn->query($sql) === TRUE){
+				
+
+
+					$data = "{\"status\":\"true\",\"data\":[]}";
+					echo $data;
+				}
+				else{
+					$data = "{\"status\":\"false\",\"data\":[]}";
+					echo $data;
+				}
+					
+			}else{
+				$data = "{\"status\":\"error\",\"data\":[]}";
+				echo $data;
+
+			}
+				
+			
+		}
+		else{
+
+		
+		}
+	}
+	public function geCurrentOrders(){
+
+		$sqlObj = new SQLConnection();
+
+		if($sqlObj->createConnection()){
+
+			if($sqlObj->conn != null){
+
+
+				$conn = $sqlObj->conn;
+				
+
+				$currentDate = date("Y-m-d");				
+				
+				$sql = "SELECT orders.oid,orders.quantity,orders.odate,orders.status,product.pname,product.blood_group,hospitals.hname from product,orders,hospitals where orders.pid = product.pid AND orders.hid=hospitals.hid order by orders.status ";				//echo $sql;
+				
+				$result = $conn->query($sql);
+				if($result->num_rows >0){
+					$data = "{\"status\":\"true\",\"data\":[";
+					while($row = $result->fetch_assoc()){
+						//echo "Location :".$row['locationid']." Quantity :".$row['quantity'];
+
+						$data = $data."{\"odate\":\"".$row['odate']."\",\"pname\":\"".$row['pname']."\",\"oid\":\"".$row['oid']."\",\"hname\":\"".$row['hname']."\",\"status\":\"".$row['status']."\",\"bloodGroup\":\"".$row['blood_group']."\",\"quantity\":\"".$row['quantity']."\"},";
+					}
+
+
+					$data = substr($data, 0, -1)."]}";
+					echo $data;
+				}
+				else{
+					$data = "{\"status\":\"false\",\"data\":[]}";
+					echo $data;
+				}
+					
+			}else{
+				$data = "{\"status\":\"error\",\"data\":[]}";
+				echo $data;
+
+			}
+				
+			
+		}
+		else{
+
+		
+		}
+	}
+
+	public function createOrder($hid,$orders){
+		$sqlObj = new SQLConnection();
+		
+
+		if($sqlObj->createConnection()){
+
+			if($sqlObj->conn != null){
+
+
+				$conn = $sqlObj->conn;
+				$conn->autocommit(FALSE);
+				$currentDate = date("Y-m-d");
+				//echo print_r($orders)."<br>";
+				foreach($orders as $item){
+
+					$sql = "call storeOrder(".$hid.",".$item->{'pid'}.",'".$currentDate."',".$item->{'quantity'}.",@s)";
+
+					//echo $sql;
+					$conn->query($sql);
+				}
+								
+				
+				
+				if(!$conn->commit()){
+					$data = "{\"status\":\"false\",\"data\":[]}";
+					echo $data;
+				}
+				else{
+					$data = "{\"status\":\"true\",\"data\":[]}";
+					echo $data;
+				}
+				
+				
+				
+					
+			}else{
+				$data = "{\"status\":\"false\",\"data\":[]}";
+				echo $data;
+
+			}
+				
+			
+		}
+		else{
+
+			$data = "{\"status\":\"error\",\"data\":[]}";
+				echo $data;
+		}
+	}
+
+}
 class Bank{
 
 	public function getProducts(){
@@ -679,7 +1069,7 @@ class Bank{
 
 				$currentDate = date("Y-m-d");				
 				
-				$sql = "SELECT * from product where product";
+				$sql = "SELECT * from product";
 				//echo $sql;
 				
 				$result = $conn->query($sql);

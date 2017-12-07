@@ -59,12 +59,8 @@
 
 	});
 
-	</script>
+		</script>
 	<style>
-		body{
-			background-color: #f1f1f1;
-		}
-
 		label{
 	
     	z-index: 5;
@@ -76,69 +72,58 @@
 			z-index: 6;
 			position: relative;
 		}
-
 	</style>
-
 </head>
 
 <body>
-	<div class="fluid-container custom-nav-bar-2">
-		<div class="row">
-				
-			</div>
-			<div class="row">
-				<div class="col-sm-12">
-					<div class="container">
-						<div class="custom-nav-bar-2">
-						<div class="custom-nav-bar-2-front">
-
-						</div>
-						<div class="custom-nav-bar-2-last">
-							<div class="nav-bar-open"></div>
-							<a target-id="prod" id="nav-btn-last" href="./" class="btn nav_btn_2 custom_active">HOME</a>
-							
-							
-
-						</div>
-
-					</div>
-					</div>
-					
-				</div>
-			</div>
-		</div>
-	<div class="fluid-container ">
-		<div class="row ">
-			<div class="col-sm-3 ">
+	<div class="fluid-container fullscreen">
+		<div class="row fullscreen">
+			<div class="col-sm-6 fullscreen posterParent">
 				<div class="poster">
-					
+					<h1 class="center">JOIN</h1>
+					<h3 class="center">AND</h3>
+					<h1 class="center">SAVE</h1>
+					<h1 class="center">MILLIONS</h1>
 				</div> 
 			</div>
-			<div class="col-sm-6 ">
-
+			<div class="col-sm-6 fullscreen">
 				<div class="dsu_formcontainer">
-					<form class="form_des" name="donarLogin" action="processlogin.php" method="post">
+					<form name="donarSignUp" action="./hospital/add.php" method="post">
 						 
-						   <div class="hospital_login">DONAR LOGIN</div>
+						   <div class="form-group">
+								    <label data="name">Name</label>
+								    <input target-label="name" type="text" name="hname" class="form-control custom-form-control" id="name">
+							    
+							    </div>
+						 
 						    <div class="form-group">
 								<label data="uname">Username</label>
-								<input target-label="uname" type="text" name="uname" class="form-control custom-form-control" id="uname" autocomplete="off">								    
-						    </div>					  	
-					  		<div class="form-group">
-							    <label data="pword">Password</label>
-							    <input target-label="pword" type="password" name="pword" class="form-control custom-form-control" id="pword">
-							    
-							</div>
+								<input target-label="uname" type="text" name="uname" class="form-control custom-form-control" id="uname">								    
+						    </div>
 
-						  <input type="submit" style="outline:none;border-radius: 0px; margin-top: 10px; width:100px;background-color: red;    height: 50px;" class="btn btn-danger" value="login">					   
+
+						      <div class="row">
+						  	<div class="col-sm-6">
+						  		<div class="form-group">
+								    <label data="pword">Password</label>
+								    <input target-label="pword" type="password" name="pword" class="form-control custom-form-control" id="pword">
+								    
+								</div>
+								  
+							</div>
+							<div class="col-sm-6">
+								  <div class="form-group">
+								    <label data="repword">Confirm Password</label>
+								    <input target-label="repword" type="password" name="pword" class="form-control custom-form-control" id="repword">
+								    
+								</div>
+							</div>
+						  </div>
+
+						  <input type="submit" style="outline:none;border-radius: 200px; margin-top: 10px; width:100px;background-color: red" class="btn btn-danger" value="Sign Up"/>
+						   
+						   
 					</form>
-					
-					<div class="hospital_signup"><a href="./donarSignUp.php">Sign Up</a></div>
-				</div> 
-			</div>
-			<div class="col-sm-3 ">
-				<div class="poster">
-					
 				</div> 
 			</div>
 		</div>

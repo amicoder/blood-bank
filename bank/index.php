@@ -89,7 +89,7 @@
 			</div>
 			<div class="col-sm-6 ">
 
-				<div class="dsu_formcontainer">
+				<div class="dsu_formcontainer" style="background-color: white;">
 					<form name="donarLogin" action="dashboard-bank.php" method="post">
 						 
 						   <div>Admin Login</div>

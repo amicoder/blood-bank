@@ -1,17 +1,15 @@
 
 <?php 
 	session_start();
-	$id = $_SESSION['id'];
+	$id = "";
+	if(isset($_SESSION['id'])){
+		$id = $_SESSION['id'];
+	}else{
+		echo "not set";
+		header("Location: ./");
+	}
+	
 
-/*
-	include "./api/classes.php";
-
-	$donar = new Donar();
-
-	if($id != null)
-	$donar->getDonarProfile(''.$id);
-
-*/
 ?>
 <!DOCTYPE html>
 <html lang="enUS">
@@ -57,6 +55,7 @@
 
 
 			var data = new FormData();
+			console.log("id : <?php echo $id ?>");
 			data.append( "id", '<?php echo $id ?>' );
 
 		fetch("./donar/getDonarProfile.php",{
@@ -70,11 +69,14 @@
 		          response.status);  
 		        return;  
 		      }
-		     
+		     	//console.log(response.text());
+		     	
 		      response.json().then((data)=>{
+		      	console.log(data);
 		      	var donar= data[0];
-		      	console.log('<?php echo $id ?>');
-		      	$('#donarName').html(donar.dname);
+		      	//console.log('<?php echo $id ?>');
+		      
+		      	$('#donarName').html(donar.dname+" | ID  "+donar.did);
 		      	$('#donarAge').html("Age : "+donar.age);
 		      	$('#donarWeight').html("Weight : "+donar.weight);
 		      	$('#donarBG').html(donar.bloodGroup);
@@ -82,7 +84,6 @@
 		      	 console.log(data);
 		      	
 		      	
-
 
 		      });
 		     
@@ -153,6 +154,7 @@
 		return monthNames[(mon-1)];
 	}
 	var count =0;
+
 	function loadDonationInformation(){
 
 
@@ -194,7 +196,7 @@
 				 var points = parseInt(count/1000);
 				 $('#totalPoints').html(points);
 		      });
-
+				
 		    
 		    }  
 		  )  
@@ -237,7 +239,7 @@
 	
 		<div class="row fullscreen" style="padding-top: 0px;
     padding-bottom: 50px;">
-			<div class="col-sm-3 fullscreen profileContainer">
+			<div class="col-sm-3 profileContainer">
 				<div class="donarTitle" id="donarTitle">
 
 					<img src="./img/profile.png" class="donarImage img-circle" height="50px" width="50px"/>
@@ -247,6 +249,7 @@
 
 					<div class="row">
 						<div class="col-sm-6" style="display: flex;justify-content: space-evenly;flex-direction: column;">
+							
 							<h5 id="donarAge">Age : 20</h5>
 							<h5 id="donarGender">Gender : Male</h5>
 							<h5 id="donarWeight">Weight : 45</h5>
@@ -263,8 +266,8 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-sm-7 fullscreen ">
-				<div id="donated" class="fullscreen infoPanel hide">
+			<div class="col-sm-7 ">
+				<div id="donated" class="infoPanel hide">
 					<div class="tableContainer">
 						<table class="table">
 						    <thead>
@@ -280,7 +283,7 @@
 						</table>
 					</div>
 				</div>
-				<div id="events" class="fullscreen infoPanel events hide show">
+				<div id="events" class="infoPanel events hide show">
 					
 					<div id="event_cards" class="event_cards">
 						<!--
@@ -297,12 +300,12 @@
 					</div>
 					
 				</div>
-				<div id="contactus" class="fullscreen infoPanel events hide">
+				<div id="contactus" class="infoPanel events hide">
 					
 					
 				</div>
 			</div>
-			<div class="col-sm-2 fullscreen navigations">
+			<div class="col-sm-2 navigations">
 				<div class="navigation_container">
 					<button target-id="events" id="nav_btn" class="btn btn-block nav_btn"><i target-id="events" class="material-icons">event</i><div target-id="events"class="nav_title" >Events</div></button>
 					<button target-id="donated" id="nav_btn" class="btn btn-block nav_btn"><i target-id="donated" class="material-icons">playlist_add_check</i><div target-id="donated" class="nav_title">Donated</div></button>
